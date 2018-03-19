@@ -7,13 +7,11 @@ class Tournament extends Component {
 
     return phase.filter(phase => phase.eventId === id).map(phase => {
       return (
-        <a className='dropdown-item' key={phase.id}>
+        <a className='dropdown-item' key={phase.id} onClick={() => console.log(phase.id)}>
           {phase.name}
         </a>
       );
     });
-
-    // return currPhase;
   }
 
   renderEventNames(events) {
