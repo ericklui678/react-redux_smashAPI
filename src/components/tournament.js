@@ -2,11 +2,34 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class Tournament extends Component {
+  renderPhase(id) {
+    const { phase } = this.props.tournament.entities;
+
+    return phase.filter(phase => phase.eventId === id).map(phase => {
+      return (
+        <a className='dropdown-item' key={phase.id}>
+          {phase.name}
+        </a>
+      );
+    });
+
+    // return currPhase;
+  }
+
   renderEventNames(events) {
     return events.map((event) => {
-      return <li className='list-group-item' key={event.id}>
-        {event.name}
-      </li>
+      return (
+        <li className='list-group-item' key={event.id}>
+          <div className='dropdown'>
+            <button className="btn btn-outline-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {event.name}
+            </button>
+            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              {this.renderPhase(event.id)}
+            </div>
+          </div>
+        </li>
+      );
     });
   }
 
