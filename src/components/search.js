@@ -17,7 +17,6 @@ class Search extends Component {
 
   onFormSubmit(e) {
     e.preventDefault();
-    console.log('call action here');
     this.props.fetchTournament(this.state.text);
     this.setState({ text: '' });
   }

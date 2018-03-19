@@ -11,11 +11,14 @@ class Tournament extends Component {
   }
 
   renderTournyInfo() {
+    if (this.props.tournament.error) return <div>Tournament not found</div>
     if (!this.props.tournament.entities) return;
 
     const { entities } = this.props.tournament;
     const { tournament } = entities;
     const icon = tournament.images[tournament.images.length - 1].url;
+
+    console.log(entities);
 
     return (
       <div>
@@ -29,6 +32,7 @@ class Tournament extends Component {
           </div>
         </div>
         <hr></hr>
+        <h2>Events</h2>
         <ul className='list-group'>
           {this.renderEventNames(entities.event)}
         </ul>

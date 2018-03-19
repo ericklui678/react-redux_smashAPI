@@ -8,8 +8,8 @@ export default function(state = {}, action) {
         let newState = action.payload.data;
         return newState;
       } else {
-        console.log('404: Tournament not found');
-        return state;
+        let newState = { error: 'Tournament not found' }
+        return newState;
       }
     default:
       return state;

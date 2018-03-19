@@ -8,7 +8,7 @@ const EXPAND_ALL = 'expand[]=event&expand[]=phase&expand[]=groups';
 
 export function fetchTournament(tournament) {
   let url = `${CORS_PROXY}/${ROOT_URL}/tournament/${tournament}?${EXPAND_ALL}`;
-  console.log(url);
+  console.log('action now fetching from', url);
   const request = axios.get(url);
 
   return {
