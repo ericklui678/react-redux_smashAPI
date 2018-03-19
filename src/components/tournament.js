@@ -1,50 +1,52 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { fetchTournament } from '../actions';
 
 class Tournament extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: ''
-    };
+  renderEventNames(events) {
+    return events.map((event) => {
+      return <li className='list-group-item' key={event.id}>
+        {event.name}
+      </li>
+    });
   }
 
-  onTextChange(e) {
-    this.setState({ text: e.target.value });
-  }
+  renderTournyInfo() {
+    if (!this.props.tournament.entities) return;
 
-  onFormSubmit(e) {
-    e.preventDefault();
-    console.log('call action here');
-    this.props.fetchTournament('genesis-3');
-    this.setState({ text: '' });
+    const { entities } = this.props.tournament;
+    const { tournament } = entities;
+    const icon = tournament.images[tournament.images.length - 1].url;
+
+    return (
+      <div>
+        <div className='media mt-3'>
+          <div className='w-25 mr-3'>
+            <img className='img-thumbnail' src={icon} alt={tournament.name}/>
+          </div>
+          <div className='media-body'>
+            <h2>{tournament.name} - {tournament.regionDisplayName}</h2>
+            <p>{tournament.venueName} - {tournament.venueAddress}</p>
+          </div>
+        </div>
+        <hr></hr>
+        <ul className='list-group'>
+          {this.renderEventNames(entities.event)}
+        </ul>
+      </div>
+    );
   }
 
   render() {
-    console.log(this.state.text);
     return (
       <div>
-        <form onSubmit={this.onFormSubmit.bind(this)} className='input-group'>
-          <input
-            value={this.state.text}
-            className='form-control'
-            placeholder='Enter tournament slug'
-            onChange={this.onTextChange.bind(this)}
-          />
-          <button
-            type='submit'
-            className='btn btn-primary'>Search
-          </button>
-        </form>
+        {this.renderTournyInfo()}
       </div>
     );
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchTournament }, dispatch);
+function mapStateToProps(state) {
+  return { tournament: state.tournament };
 }
 
-export default connect(null, mapDispatchToProps)(Tournament);
+export default connect(mapStateToProps)(Tournament);
