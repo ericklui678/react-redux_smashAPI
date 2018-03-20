@@ -2,12 +2,58 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class Tournament extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      phase: '',
+      groups: []
+    }
+    this.renderPhaseGroups = this.renderPhaseGroups.bind(this);
+  }
+
+  renderPhaseGroups() {
+    if (!this.state.groups.length) return;
+
+    const phase_groups = this.state.groups.map(group => {
+      return (
+        <button
+          type='button'
+          key={group.id}
+          className='col-2 btn btn-outline-danger'>{group.displayIdentifier}
+        </button>
+      );
+    });
+
+    return (
+      <div>
+        <hr />
+        <h1>{this.state.phase}</h1>
+        <div className='row'>
+          {phase_groups}
+        </div>
+      </div>
+    );
+  }
+
+  filterPhaseGroups(phase) {
+    console.log(phase);
+    const { groups } = this.props.tournament.entities;
+    const brackets = groups.filter(group => group.phaseId === phase.id);
+    console.log(brackets);
+    this.setState({ groups: brackets })
+    this.setState({ phase: phase.name })
+  }
+
   renderPhase(id) {
-    const { phase } = this.props.tournament.entities;
+    const { entities } = this.props.tournament;
+    const { phase } = entities;
 
     return phase.filter(phase => phase.eventId === id).map(phase => {
       return (
-        <a className='dropdown-item' key={phase.id} onClick={() => console.log(phase.id)}>
+        <a
+          className='dropdown-item'
+          key={phase.id}
+          onClick={() => this.filterPhaseGroups(phase)}>
           {phase.name}
         </a>
       );
@@ -39,8 +85,6 @@ class Tournament extends Component {
     const { tournament } = entities;
     const icon = tournament.images[tournament.images.length - 1].url;
 
-    console.log(entities);
-
     return (
       <div>
         <div className='media mt-3'>
@@ -57,11 +101,13 @@ class Tournament extends Component {
         <ul className='list-group'>
           {this.renderEventNames(entities.event)}
         </ul>
+        {this.renderPhaseGroups()}
       </div>
     );
   }
 
   render() {
+    console.log(this.state.groups);
     return (
       <div>
         {this.renderTournyInfo()}
