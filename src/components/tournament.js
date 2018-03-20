@@ -8,35 +8,34 @@ class Tournament extends Component {
     this.state = {
       phase: '',
       groups: [],
+      entrants: []
     }
     this.renderPhaseGroups = this.renderPhaseGroups.bind(this);
     this.renderPlacements = this.renderPlacements.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    // this.setState({
-    //   phase: '',
-    // });
+    if (this.state.entrants !== nextProps.entrants) {
+      const entrants = nextProps.entrants.map((entrant) => {
+        return (
+          <li className='list-group-item' key={entrant.name}>
+            {entrant.placement} - {entrant.name}
+          </li>
+        );
+      })
+      this.setState({ entrants: entrants });
+    }
   }
 
   renderPlacements() {
     if (!this.props.entrants.length) return;
-
-    const entrants = this.props.entrants.map((entrant) => {
-      return (
-        <li className='list-group-item' key={entrant.name}>
-          {entrant.placement} - {entrant.name}
-        </li>
-      );
-
-    })
 
     return (
       <div>
         <hr />
         <h2>Placements</h2>
         <ul className='list-group'>
-          {entrants}
+          {this.state.entrants}
         </ul>
       </div>
     );
@@ -63,7 +62,7 @@ class Tournament extends Component {
     return (
       <div>
         <hr />
-        <h1>{this.state.phase}</h1>
+        <h2>{this.state.phase}</h2>
         <div className='row'>
           {phase_groups}
         </div>
@@ -74,8 +73,9 @@ class Tournament extends Component {
   filterPhaseGroups(phase) {
     const { groups } = this.props.tournament.entities;
     const brackets = groups.filter(group => group.phaseId === phase.id);
-    this.setState({ groups: brackets })
-    this.setState({ phase: phase.name })
+    this.setState({ groups: brackets });
+    this.setState({ phase: phase.name });
+    this.setState({ entrants: [] });
   }
 
   renderPhase(id) {

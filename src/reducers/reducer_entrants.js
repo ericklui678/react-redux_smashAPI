@@ -1,4 +1,4 @@
-import { FETCH_ENTRANTS } from '../actions';
+import { FETCH_ENTRANTS, RESET_ENTRANTS } from '../actions';
 
 export default function(state = [], action) {
 
@@ -15,6 +15,8 @@ export default function(state = [], action) {
         return 1;
       });
       return newState;
+    case RESET_ENTRANTS:
+      return [];
     default:
       return state;
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchTournament } from '../actions';
+import { fetchTournament, resetEntrants } from '../actions';
 
 class Search extends Component {
   constructor(props) {
@@ -18,7 +18,9 @@ class Search extends Component {
   onFormSubmit(e) {
     e.preventDefault();
     this.props.fetchTournament(this.state.text);
+    this.props.resetEntrants();
     this.setState({ text: '' });
+
   }
 
   render() {
@@ -43,7 +45,7 @@ class Search extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchTournament }, dispatch);
+  return bindActionCreators({ fetchTournament, resetEntrants }, dispatch);
 }
 
 export default connect(null, mapDispatchToProps)(Search);
