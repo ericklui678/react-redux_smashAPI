@@ -1,14 +1,49 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { fetchEntrants } from '../actions';
 
 class Tournament extends Component {
   constructor(props) {
     super(props);
     this.state = {
       phase: '',
-      groups: []
+      groups: [],
     }
     this.renderPhaseGroups = this.renderPhaseGroups.bind(this);
+    this.renderPlacements = this.renderPlacements.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // this.setState({
+    //   phase: '',
+    // });
+  }
+
+  renderPlacements() {
+    if (!this.props.entrants.length) return;
+
+    const entrants = this.props.entrants.map((entrant) => {
+      return (
+        <li className='list-group-item' key={entrant.name}>
+          {entrant.placement} - {entrant.name}
+        </li>
+      );
+
+    })
+
+    return (
+      <div>
+        <hr />
+        <h2>Placements</h2>
+        <ul className='list-group'>
+          {entrants}
+        </ul>
+      </div>
+    );
+  }
+
+  onGroupClick(id) {
+    this.props.fetchEntrants(id);
   }
 
   renderPhaseGroups() {
@@ -19,7 +54,8 @@ class Tournament extends Component {
         <button
           type='button'
           key={group.id}
-          className='col-2 btn btn-outline-danger'>{group.displayIdentifier}
+          className='col-2 btn btn-outline-danger'
+          onClick={() => this.onGroupClick(group.id)}>{group.displayIdentifier}
         </button>
       );
     });
@@ -36,10 +72,8 @@ class Tournament extends Component {
   }
 
   filterPhaseGroups(phase) {
-    console.log(phase);
     const { groups } = this.props.tournament.entities;
     const brackets = groups.filter(group => group.phaseId === phase.id);
-    console.log(brackets);
     this.setState({ groups: brackets })
     this.setState({ phase: phase.name })
   }
@@ -102,12 +136,12 @@ class Tournament extends Component {
           {this.renderEventNames(entities.event)}
         </ul>
         {this.renderPhaseGroups()}
+        {this.renderPlacements()}
       </div>
     );
   }
 
   render() {
-    console.log(this.state.groups);
     return (
       <div>
         {this.renderTournyInfo()}
@@ -117,7 +151,10 @@ class Tournament extends Component {
 }
 
 function mapStateToProps(state) {
-  return { tournament: state.tournament };
+  return {
+    tournament: state.tournament,
+    entrants: state.entrants
+  };
 }
 
-export default connect(mapStateToProps)(Tournament);
+export default connect(mapStateToProps, { fetchEntrants })(Tournament);
