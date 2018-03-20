@@ -19,7 +19,7 @@ class Tournament extends Component {
       return (
         <li className='list-group-item' key={event.id}>
           <div className='dropdown'>
-            <button className="btn btn-outline-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button className="btn btn-outline-danger btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {event.name}
             </button>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
