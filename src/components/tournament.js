@@ -71,6 +71,8 @@ class Tournament extends Component {
   }
 
   filterPhaseGroups(phase) {
+    // check if no phase groups, render nothing
+    // console.log('render phase groups', this.props.tournament.entities.groups);
     const { groups } = this.props.tournament.entities;
     const brackets = groups.filter(group => group.phaseId === phase.id);
     this.setState({ groups: brackets });
